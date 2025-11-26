@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여행지 목록</title>
+</head>
+
+<style>
+    .header body {
+        /* border: 1px solid; */
+        margin: 10px auto;
+        width: 960px;
+        height: auto;
+    }
+
+    #header {
+        border: 1px solid;
+        border-color: royalblue;
+        margin: 20px auto;
+        width: 960px;
+        display: flex;
+    }
+
+    #logo {
+        /* border: 1px solid; */
+        width: 200px;
+        height: 100px;
+        background-color: #868FEE;
+        /* background-color: #7480FF; */
+
+        /* 가운데 정렬 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #menu {
+        /* border: 1px solid; */
+        height: 100px;
+        width: 760px;
+
+        /* 가운데 정렬 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    #menu ul {
+        /* border: 1px solid; */
+        padding-left: 0;
+        /*기본 들여쓰기 제거*/
+    }
+
+    #menu a {
+        position: relative;
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    #menu a::after {
+        content: "⭐";
+        position: absolute;
+        top: -19px;
+        /*글자 바로 위 배치*/
+        left: 50%;
+        /*중앙 배치*/
+        transform: translateX(-50%);
+        /*정확히 중앙에 맞추기*/
+        opacity: 0;
+        transition: 0.2s ease;
+        font-size: 14px;
+    }
+
+    #menu a:hover {
+        /* color: #5C63FF; */
+        color: mediumspringgreen;
+    }
+
+    #menu a:hover::after {
+        opacity: 1;
+    }
+
+    #menu1 {
+        /* border: 1px solid; */
+        height: 100px;
+        width: 570px;
+
+        /* 가운데 정렬 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    #menu1 li {
+        list-style: none;
+        /*리스트 불릿 제거*/
+        /* border: 1px solid; */
+        height: 90px;
+
+        margin: 0 30px;
+        width: 190px;
+        font-size: 18px;
+        font-weight: bold;
+
+        /* 가운데 정렬 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    #menu2 {
+        /* border: 1px solid; */
+        height: 100px;
+        width: 190px;
+        background-color: #fffedc;
+
+        /* 가운데 정렬 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    #menu2 li {
+        list-style: none;
+        /*리스트 불릿 제거*/
+        /* border: 1px solid; */
+        height: 90px;
+        margin: 0 30px;
+        width: 210px;
+        font-size: 18px;
+        font-weight: bold;
+
+        /* 가운데 정렬 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* content */
+    /* 베이스 스타일 */
+    body {
+        margin: 0;
+        padding: 0;
+        background: #f5f7fa;
+        font-family: "Noto Sans KR", sans-serif;
+        color: #333;
+    }
+
+    .container {
+        max-width: 70%;
+        margin: 70px auto;
+        padding: 0 20px;
+    }
+
+    h2 {
+        font-size: 34px;
+        margin-bottom: 40px;
+    }
+
+    /* 검색 박스 */
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 60px;
+    }
+
+    .search-box input {
+        width: 30%;
+        padding: 12px 20px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-right: 6px;
+    }
+
+    .search-box button {
+        padding: 10px 20px;
+        color: white;
+        background-color: #1e90ff;
+        border: 1px solid #b7d4ff;
+        font-size: 16px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    /* 탭 */
+    .tabs {
+        margin: 30px 0;
+        display: flex;
+        gap: 10px;
+    }
+
+    .tabs button {
+        padding: 10px 20px;
+        border: 1px solid #b7d4ff;
+        background: #e9f3ff;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .tabs button.active {
+        background: #1e90ff;
+        color: white;
+        border-color: #1e90ff;
+    }
+
+    /* 카드 그리드 */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        transition: transform 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    .card img {
+        width: 100%;
+        height: 170px;
+        object-fit: cover;
+    }
+
+    .card .text {
+        padding: 15px;
+    }
+
+    .card h3 {
+        margin: 0 0 10px;
+        font-size: 20px;
+    }
+
+    .card p {
+        margin: 0;
+        color: #666;
+    }
+
+    #footer {
+        /* border: 1px solid; */
+        border-top: 1px solid;
+        border-color: royalblue;
+
+        margin-top: 20px;
+        height: 150px;
+        width: 960px;
+        display: block;
+        background-color: white;
+    }
+
+    #footUp {
+        /* border: 1px solid; */
+        height: 50px;
+        width: 960px;
+        margin: 10px auto;
+        text-align: center;
+        gap: 40px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #footUp a {
+        color: black;
+        text-decoration: none;
+    }
+
+    #footUp a:hover {
+        /* color: rebeccapurple; */
+        color: mediumspringgreen;
+    }
+
+    #footdown {
+        /* border: 1px solid; */
+        height: 50px;
+        width: 960px;
+        margin: 20px auto;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<body>
+    <div id="header">
+        <div id="logo">
+            <img src="./img/headerLogo.PNG" alt="헤더로고(세로 79px*가로140px)">
+        </div>
+
+        <div id="menu">
+            <ul id="menu1">
+                <li id="home"><a href="">홈</a></li>
+                <li id="tourList"><a href="">여행지</a></li>
+                <li id="freeBoard"><a href="">자유게시판</a></li>
+            </ul>
+            <ul id="menu2">
+                <li id="member">
+                    <a id="goLogin" href="">로그인/회원가입</a>
+                    <a id="myPage" href="" style="display: none;">마이페이지</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <main class="container">
+        <h2>지역별 여행지</h2>
+
+        <!-- 검색 영역 -->
+        <section class="search-box">
+            <input type="text" placeholder="지역 또는 키워드를 입력하세요" />
+            <button>검색</button>
+        </section>
+
+        <!-- 카테고리 탭 -->
+        <section class="tabs">
+            <button class="active">전체</button>
+            <button>바다</button>
+            <button>산</button>
+            <button>도심</button>
+        </section>
+
+        <!-- 카드 리스트 -->
+        <section class="card-grid" id="trip-list">
+            <a href="#" class="card-link">
+                <article class="card">
+                    <img src="img/sample1.jpg" alt="여행지1" />
+                    <div class="text">
+                        <h3>경복궁</h3>
+                        <p>아름다운 전통 궁궐</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#" class="card-link">
+                <article class="card">
+                    <img src="img/sample2.jpg" alt="여행지2" />
+                    <div class="text">
+                        <h3>해운대 해수욕장</h3>
+                        <p>부산 대표 해변</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#" class="card-link">
+                <article class="card">
+                    <img src="img/sample3.jpg" alt="여행지3" />
+                    <div class="text">
+                        <h3>남산타워</h3>
+                        <p>서울 전망 명소</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#" class="card-link">
+                <article class="card">
+                    <img src="img/sample3.jpg" alt="여행지3" />
+                    <div class="text">
+                        <h3>경복궁</h3>
+                        <p>아름다운 전통 궁궐</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#" class="card-link">
+                <article class="card">
+                    <img src="img/sample3.jpg" alt="여행지3" />
+                    <div class="text">
+                        <h3>해운대 해수욕장</h3>
+                        <p>부산 대표 해변</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#" class="card-link">
+                <article class="card">
+                    <img src="img/sample3.jpg" alt="여행지3" />
+                    <div class="text">
+                        <h3>남산타워</h3>
+                        <p>서울 전망 명소</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#" class="card-link">
+                <article class="card">
+                    <img src="img/sample3.jpg" alt="여행지3" />
+                    <div class="text">
+                        <h3>경복궁</h3>
+                        <p>아름다운 전통 궁궐</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#" class="card-link">
+                <article class="card">
+                    <img src="img/sample3.jpg" alt="여행지3" />
+                    <div class="text">
+                        <h3>해운대 해수욕장</h3>
+                        <p>부산 대표 해변</p>
+                    </div>
+                </article>
+            </a>
+
+            <a href="#" class="card-link">
+                <article class="card">
+                    <img src="img/sample3.jpg" alt="여행지3" />
+                    <div class="text">
+                        <h3>남산타워</h3>
+                        <p>서울 전망 명소</p>
+                    </div>
+                </article>
+            </a>
+        </section>
+
+    </main>
+
+    <div id="footer">
+        <div id="footUp">
+            <a href="">1:1문의</a>
+            <a href="">공지사항</a>
+            <a href="">Q&A</a>
+            <a href="">사이트 소개</a>
+        </div>
+        <div id="footdown">
+            <img src="./img/footerLogo.PNG" alt="작은로고">
+        </div>
+    </div>
+
+    <script>
+        async function loadTrips() {
+            try {
+                const res = await fetch("https://api.server.com/trips");
+                const list = await res.json();
+
+                const container = document.getElementById("trip-list");
+
+                // container.innerHTML = "";
+
+                list.forEach(item => {
+                    container.innerHTML += `
+                <a href="detail.html?id=${item.id}" class="card-link">
+                    <article class="card">
+                        <img src="${item.image}" alt="${item.title}">
+                        <div class="text">
+                            <h3>${item.title}</h3>
+                            <p>${item.description}</p>
+                        </div>
+                    </article>
+                </a>`;
+                });
+            } catch (e) {
+                console.error(e);
+                alert("여행지 목록 로딩 중 오류 발생");
+            }
+        }
+
+        loadTrips();
+
+    </script>
+
+</body>
+
+</html>

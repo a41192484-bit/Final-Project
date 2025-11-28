@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+
+    <style>
+        #body {
+            /* border: 1px solid; */
+            height: 700px;
+            width: 960px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #loginBox {
+            border: 1px solid;
+            border-color: royalblue;
+            border-radius: 10px;
+
+            height: 380px;
+            width: 480px;
+            background-color: white;
+        }
+
+        #loginBox h2 {
+            /* border: 1px solid; */
+            height: 60px;
+            margin: 15px;
+            color: royalblue;
+            background-color: #dce7ff;
+            border-radius: 10px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #boxIN2 {
+            /* border: 1px solid; */
+            height: auto;
+            padding-top: 18px;
+            margin: 15px;
+
+            /* 가운데 정렬 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 40px;
+        }
+
+        #boxIN2 span {
+            /* border: 1px solid; */
+            font-size: 18px;
+            font-weight: bold;
+            color: royalblue;
+
+            display: inline-block;
+            width: 215px;
+            text-align: left;
+
+            margin-bottom: 5px;
+        }
+
+        #boxIN2 input {
+            display: block;
+            height: 20px;
+            margin-bottom: 20px;
+            padding: 8px;
+            width: 200px;
+        }
+
+        #boxIN2 button {
+            border-radius: 10px;
+
+            display: flexbox;
+            height: 125px;
+            width: 80px;
+
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        #boxIN2 button:hover {
+            font-weight: bold;
+            color: white;
+
+            border-color: royalblue;
+            background-color: rgb(202, 213, 245)
+        }
+
+        #boxIN3 {
+            /* border: 1px solid; */
+            border-top: royalblue 1px solid;
+            padding: 15px;
+            margin: 15px;
+        }
+
+        #boxIN3 a {
+            /* border: 1px solid; */
+            display: inline;
+            width: 400px;
+            font-size: 17px;
+
+            color: black;
+            text-decoration: none;
+        }
+
+        #boxIN3 a:hover {
+            color: mediumvioletred;
+            /* font-weight: bold; */
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <div id="body">
+            <div id="loginBox">
+                <div>
+                    <h2>◈ 로그인 ◈</h2>
+                </div>
+                <div id="boxIN2">
+                    <div>
+                        <span>아이디</span>
+                        <input type="text" id="userId" placeholder="이메일 형식 아이디 입력">
+                        <span>비밀번호</span>
+                        <input type="password" id="userPass" placeholder="비밀번호 입력">
+                    </div>
+                    <div>
+                        <button onclick="login()">로그인</button>
+                    </div>
+                </div>
+                <div id="boxIN3">
+                    <span>계정이 없으신가요?</span>
+                    <a href="./member-join.html">'회원가입' ▶</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+
+    <script src="menu.js"></script>
+    <script>
+        function login() {
+            //입력값
+            const userId = document.getElementById("userId").value;
+            const userPass = document.getElementById("userPass").value;
+
+            if (!userId || !userPass) {
+                alert("아이디와 비밀번호를 모두 입력하세요.");
+                return;
+            } else {
+                alert("로그인합니다.");
+            }
+
+            fetch("/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, password: userPass })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("로그인 성공!");
+                        //로그인 유지
+                        user.isLogin = true;
+
+                        //데이터베이스에서 가져온 정보 프론트에 있는 변수에 저장
+                        user.id = data.login_id;
+                        user.name = data.name;
+                        user.nickName = data.nickname;
+                        //비밀번호는 민감하니 따로 처리
+                        let pass;
+                        pass = data.password
+                        user.password = "*".repeat(pass.length);
+
+                        updateMenu();
+                        window.location.href = "./member-mypage.html";
+                    } else {
+                        alert("로그인 실패");
+                    }
+                })
+                .catch(err => console.error(err));
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여행지 상세조회</title>
+
+    <style>
+        .detail-container {
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        /* 대표 이미지 */
+        .detail-image img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 제목 */
+        .detail-header {
+            margin-top: 25px;
+        }
+
+        .detail-header h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+        }
+
+        /* 정보 카드들 */
+        .info-cards {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .info-card {
+            display: flex;
+            gap: 12px;
+            background: white;
+            padding: 15px;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            align-items: center;
+        }
+
+        .info-card .icon {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        /* 상세 설명 */
+        .detail-content {
+            margin-top: 40px;
+            background: white;
+            padding: 20px 25px;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .detail-content h2 {
+            margin-bottom: 15px;
+        }
+
+        /* 목록 버튼 */
+        .back-btn-wrap {
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 22px;
+            background: #1e90ff;
+            color: white;
+            font-size: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: #006edc;
+        }
+    </style>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <main class="detail-container">
+
+            <!-- 대표 이미지 -->
+            <div class="detail-image">
+                <img src="img/sample1.jpg" alt="경복궁">
+            </div>
+
+            <!-- 제목 & 설명 -->
+            <section class="detail-header">
+                <h1>경복궁</h1>
+                <p class="subtitle">아름다운 전통 궁궐</p>
+            </section>
+
+            <!-- 정보 카드 -->
+            <section class="info-cards">
+                <div class="info-card address-card">
+                    <img src="img/icon/location.png" class="icon">
+                    <div>
+                        <h4>주소</h4>
+                        <p class="value">서울 종로구 사직로 161</p>
+                    </div>
+                </div>
+
+                <div class="info-card time-card">
+                    <img src="img/icon/time.png" class="icon">
+                    <div>
+                        <h4>운영 시간</h4>
+                        <p class="value">09:00 ~ 18:00</p>
+                    </div>
+                </div>
+
+                <div class="info-card phone-card">
+                    <img src="img/icon/phone.png" class="icon">
+                    <div>
+                        <h4>문의</h4>
+                        <p class="value">02-3700-3900</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 상세 설명 -->
+            <section class="detail-content">
+                <h2>상세 소개</h2>
+                <p class="desc">
+                    경복궁은 조선 시대의 정궁으로, 역사와 문화를 느낄 수 있는
+                    대표적인 명소입니다. 고궁과 정원의 아름다움, 근정전과 경회루까지
+                    감상할 수 있어 국내외 많은 관광객들이 찾는 장소입니다.
+                </p>
+            </section>
+
+            <!-- 목록으로 돌아가기 -->
+            <div class="back-btn-wrap">
+                <a href="trip.html" class="back-btn">목록으로 돌아가기</a>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // URL에서 id 꺼내기
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+
+        // 샘플 데이터 (디자인 확인용)
+        const sampleData = {
+            image: "img/sample1.jpg",
+            title: "경복궁",
+            shortDesc: "아름다운 전통 궁궐",
+            address: "서울 종로구 사직로 161",
+            operatingTime: "09:00 ~ 18:00",
+            phone: "02-3700-3900",
+            description: "경복궁은 조선 시대의 정궁으로, 역사와 문화를 느낄 수 있는 대표적인 명소입니다."
+        };
+
+        // 화면 렌더링 함수
+        function renderDetail(data) {
+            document.querySelector(".detail-image img").src = data.image;
+            document.querySelector(".detail-image img").alt = data.title;
+
+            document.querySelector(".detail-header h1").innerText = data.title;
+            document.querySelector(".subtitle").innerText = data.shortDesc;
+
+            document.querySelector(".address-card .value").innerText = data.address;
+            document.querySelector(".time-card .value").innerText = data.operatingTime;
+            document.querySelector(".phone-card .value").innerText = data.phone;
+
+            document.querySelector(".detail-content .desc").innerText = data.description;
+        }
+
+        // API 연동 함수
+        async function loadDetail() {
+            // id가 없으면: 디자인 확인 모드 (샘플 데이터로 렌더링)
+            if (!id) {
+                console.warn("id 없음 → 디자인 미리보기 모드 작동");
+                renderDetail(sampleData);
+                return;
+            }
+
+            // id가 있으면: 실제 API 호출
+            try {
+                const res = await fetch(`https://api.server.com/trips/${id}`);
+
+                if (!res.ok) {
+                    throw new Error("API 오류: " + res.status);
+                }
+
+                const data = await res.json();
+                renderDetail(data);
+
+            } catch (err) {
+                console.error("상세정보 에러:", err);
+                alert("상세 정보를 불러올 수 없습니다. (샘플 데이터로 표시됩니다.)");
+
+                // API 오류 시에도 샘플 데이터 표시
+                renderDetail(sampleData);
+            }
+        }
+
+        loadDetail();
+    </script>
+
+</body>
+
+</html>
